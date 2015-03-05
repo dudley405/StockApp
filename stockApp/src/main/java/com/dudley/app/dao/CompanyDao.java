@@ -13,5 +13,7 @@ public interface CompanyDao extends AbstractDao {
 	void deleteCompanyByTicker(String stockTicker);
 	
 	Company findByTicker(String stockTicker);
+	
+	List<Company> findCompanyFindFirst(int number);
 
 }

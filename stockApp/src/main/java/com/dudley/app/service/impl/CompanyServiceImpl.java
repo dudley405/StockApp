@@ -2,6 +2,7 @@ package com.dudley.app.service.impl;
 
 import java.util.List;
 
+import org.hibernate.Session;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -29,7 +30,6 @@ public class CompanyServiceImpl implements CompanyService {
 			} else {
 				tempCompany.setCompanyDescription(company.getCompanyDescription());
 				tempCompany.setCompanyName(company.getCompanyName());
-				tempCompany.setPriceUpdatedDate(company.getPriceUpdatedDate());
 				tempCompany.setCompanyFinancials(company.getCompanyFinancials());
 				tempCompany.setPriceHistories(company.getPriceHistories());
 				
@@ -59,10 +59,22 @@ public class CompanyServiceImpl implements CompanyService {
 			dao.deleteCompanyByTicker(stockTicker);
 		}
 	}
+	
+	public void commit() {
+		dao.flush();
+	}
+	
+	public void clear() {
+		dao.clear();
+	}
+	
+	public List<Company> findFirst(int number) {
+		return dao.findCompanyFindFirst(number);
+	}
 
 	public Company findByTicker(String stockTicker) {
-		if (stockTicker != null) {
-			return dao.findByTicker(stockTicker);
+		if (stockTicker != null) {	
+			return dao.findByTicker(stockTicker);	
 		} else {
 			return null;
 		}

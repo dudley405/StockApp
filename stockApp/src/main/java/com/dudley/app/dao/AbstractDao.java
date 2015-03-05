@@ -15,5 +15,7 @@ public interface AbstractDao {
     void refresh(Object entity);
     
     void flush();
+    
+    void clear();
 
 }

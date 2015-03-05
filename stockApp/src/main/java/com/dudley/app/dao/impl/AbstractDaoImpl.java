@@ -27,10 +27,14 @@ public class AbstractDaoImpl {
     }
     
     public void refresh(Object entity) {
-    	getSession().refresh(entity);
+    	getSession().flush();
     }
     
     public void flush() {
     	getSession().flush();
+    }
+    
+    public void clear() {
+    	getSession().clear();
     }
 }

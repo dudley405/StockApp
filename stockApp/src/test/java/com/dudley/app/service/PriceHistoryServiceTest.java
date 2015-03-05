@@ -22,7 +22,7 @@ public class PriceHistoryServiceTest extends BaseTest {
 		priceHistory.setPriceDate(date);
 		priceHistory.setStockPrice(new Double(63.45));
 		
-		historyService.savePriceHistory(priceHistory, "WLL");
+		historyService.savePriceHistory(priceHistory);
 		
 		assertEquals(priceHistory.getStockPrice(), new Double(63.45));
 	}

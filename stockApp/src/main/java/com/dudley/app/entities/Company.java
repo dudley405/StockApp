@@ -35,8 +35,6 @@ public class Company implements java.io.Serializable {
 	private String companyName;
 	private String companyDescription;
 	private String stockTicker;
-	private Double stockPrice;
-	private LocalDateTime priceUpdatedDate;
 	private Set<CompanyFinancial> companyFinancials = new HashSet<CompanyFinancial>(0);
 	private Set<PriceHistory> priceHistories = new HashSet<PriceHistory>(0);
 
@@ -52,14 +50,11 @@ public class Company implements java.io.Serializable {
 
 	public Company(int companyId, String companyName,
 			String companyDescription, String stockTicker,
-			Double stockPrice, LocalDateTime priceUpdatedDate,
 			Set<CompanyFinancial> companyFinancials, Set<PriceHistory> priceHistories) {
 		this.companyId = companyId;
 		this.companyName = companyName;
 		this.companyDescription = companyDescription;
 		this.stockTicker = stockTicker;
-		this.stockPrice = stockPrice;
-		this.priceUpdatedDate = priceUpdatedDate;
 		this.companyFinancials = companyFinancials;
 		this.priceHistories = priceHistories;
 	}
@@ -75,7 +70,7 @@ public class Company implements java.io.Serializable {
 		this.companyId = companyId;
 	}
 
-	@Column(name = "company_name", nullable = false, length = 50)
+	@Column(name = "company_name", nullable = false, length = 150)
 	public String getCompanyName() {
 		return this.companyName;
 	}
@@ -100,25 +95,6 @@ public class Company implements java.io.Serializable {
 
 	public void setStockTicker(String stockTicker) {
 		this.stockTicker = stockTicker;
-	}
-
-	@Column(name = "stock_price", precision = 10)
-	public Double getStockPrice() {
-		return this.stockPrice;
-	}
-
-	public void setStockPrice(Double stockPrice) {
-		this.stockPrice = stockPrice;
-	}
-
-	@Column(name = "price_updated_date")
-	@Type(type = "org.jadira.usertype.dateandtime.joda.PersistentDateTime")
-	public LocalDateTime getPriceUpdatedDate() {
-		return this.priceUpdatedDate;
-	}
-
-	public void setPriceUpdatedDate(LocalDateTime priceUpdatedDate) {
-		this.priceUpdatedDate = priceUpdatedDate;
 	}
 
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "company")

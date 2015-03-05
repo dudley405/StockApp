@@ -43,9 +43,9 @@ public class CompanyServiceTest extends BaseTest {
 	@Test public void saveComany() {
 		Company company = new Company();
 		
-		company.setCompanyName("Haliburton");
+		company.setCompanyName("Whiting Petroleum");
 		company.setCompanyDescription("Large contractor");
-		company.setStockTicker("HAL2");
+		company.setStockTicker("WLL");
 		
 		service.saveCompany(company);
 	}

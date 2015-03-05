@@ -1,5 +1,6 @@
 package com.dudley.app.service.impl;
 
+import org.hibernate.Session;
 import org.joda.time.LocalDate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -14,32 +15,23 @@ import com.dudley.app.service.PriceHistoryService;
 @Service
 @Transactional
 public class PriceHistoryServiceImpl implements PriceHistoryService {
-	
-	@Autowired
-	CompanyService companyService;
-	
+
 	@Autowired
 	PriceHistoryDao dao;
 
 	@Override
-	public void savePriceHistory(PriceHistory priceHistory, String stockTicker) {
-		
-		Company company = companyService.findByTicker(stockTicker);
-		
-		if (company != null) {
-			priceHistory.setCompany(company);
-			
-			PriceHistory existingPriceHistory = historyExists(priceHistory.getPriceDate(), company);
-			
-			if (existingPriceHistory == null) {
-				dao.persist(priceHistory);
-			} else {
-				existingPriceHistory.setPriceDate(priceHistory.getPriceDate());
-				existingPriceHistory.setStockPrice(priceHistory.getStockPrice());
-				dao.update(existingPriceHistory);
-			}
+	public void savePriceHistory(PriceHistory priceHistory) {
+
+		PriceHistory existingPriceHistory = historyExists(
+				priceHistory.getPriceDate(), priceHistory.getCompany());
+
+		if (existingPriceHistory == null) {
+			dao.persist(priceHistory);
+		} else {
+			existingPriceHistory.setPriceDate(priceHistory.getPriceDate());
+			existingPriceHistory.setStockPrice(priceHistory.getStockPrice());
+			dao.update(existingPriceHistory);
 		}
-		
 	}
 
 	@Override
@@ -47,7 +39,14 @@ public class PriceHistoryServiceImpl implements PriceHistoryService {
 		return (PriceHistory) dao.getPriceHistoryByCompany(company);
 	}
 	
+	public void commit() {
+		dao.flush();
+	}
 	
+	public void clear() {
+		dao.clear();
+	}
+
 	private PriceHistory historyExists(LocalDate date, Company company) {
 		return dao.priceHistoryExists(date, company);
 	}

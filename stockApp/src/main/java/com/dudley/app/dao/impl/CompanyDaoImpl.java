@@ -35,4 +35,11 @@ public class CompanyDaoImpl extends AbstractDaoImpl implements CompanyDao {
         return (Company) criteria.uniqueResult();
 	}
 
+	@Override
+	public List<Company> findCompanyFindFirst(int number) {
+		Criteria criteria = getSession().createCriteria(Company.class);
+		criteria.setMaxResults(number);
+		return (List<Company>) criteria.list();
+	}
+
 }
