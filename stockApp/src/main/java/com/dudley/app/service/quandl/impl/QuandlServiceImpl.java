@@ -44,9 +44,13 @@ public class QuandlServiceImpl implements QuandlService {
 					PriceHistory history = new PriceHistory();
 					history.setCompany(company);
 					history.setPriceDate(LocalDate.parse(row.getLocalDate("Date").toString()));
-					history.setStockPrice(row.getDouble("Close"));
+					history.setClosingPrice(row.getDouble("Close"));
+					history.setOpenPrice(row.getDouble("Open"));
+					history.setHighPrice(row.getDouble("High"));
+					history.setLowPrice(row.getDouble("Low"));
+					history.setVolume(row.getDouble("Volume"));
 					
-					if(history.getPriceDate() != null && history.getStockPrice() != null) {
+					if(history.getPriceDate() != null && history.getClosingPrice() != null) {
 						historyService.savePriceHistory(history);
 					} 
 					

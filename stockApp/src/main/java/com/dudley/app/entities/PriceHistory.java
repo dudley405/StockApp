@@ -29,17 +29,21 @@ public class PriceHistory implements java.io.Serializable {
 	private int historyId;
 	private Company company;
 	private LocalDate priceDate;
-	private Double stockPrice;
+	private Double closingPrice;
+	private Double openPrice;
+	private Double highPrice;
+	private Double lowPrice;
+	private Double volume;
 
 	public PriceHistory() {
 	}
 
 	public PriceHistory(int historyId, Company company, LocalDate priceDate,
-			Double stockPrice) {
+			Double closingPrice) {
 		this.historyId = historyId;
 		this.company = company;
 		this.priceDate = priceDate;
-		this.stockPrice = stockPrice;
+		this.closingPrice = closingPrice;
 	}
 
 	@Id
@@ -73,13 +77,49 @@ public class PriceHistory implements java.io.Serializable {
 		this.priceDate = priceDate;
 	}
 
-	@Column(name = "stock_price", nullable = false, precision = 10, scale = 2)
-	public Double getStockPrice() {
-		return this.stockPrice;
+	@Column(name = "closing_price", nullable = false, precision = 10, scale = 2)
+	public Double getClosingPrice() {
+		return closingPrice;
 	}
 
-	public void setStockPrice(Double stockPrice) {
-		this.stockPrice = stockPrice;
+	public void setClosingPrice(Double closingPrice) {
+		this.closingPrice = closingPrice;
+	}
+
+	@Column(name = "open_price", nullable = true, precision = 10, scale = 2)
+	public Double getOpenPrice() {
+		return openPrice;
+	}
+
+	public void setOpenPrice(Double openPrice) {
+		this.openPrice = openPrice;
+	}
+
+	@Column(name = "high_price", nullable = true, precision = 10, scale = 2)
+	public Double getHighPrice() {
+		return highPrice;
+	}
+
+	public void setHighPrice(Double highPrice) {
+		this.highPrice = highPrice;
+	}
+
+	@Column(name = "low_price", nullable = true, precision = 10, scale = 2)
+	public Double getLowPrice() {
+		return lowPrice;
+	}
+
+	public void setLowPrice(Double lowPrice) {
+		this.lowPrice = lowPrice;
+	}
+
+	@Column(name = "volume", nullable = true, precision = 15, scale = 2)
+	public Double getVolume() {
+		return volume;
+	}
+
+	public void setVolume(Double volume) {
+		this.volume = volume;
 	}
 
 }

@@ -16,7 +16,7 @@ public class QuanlDaoTest extends BaseTest {
 
 	@Test
 	public void test() {
-		dao.getAllStockInfoByTicker("AAPL");
+		System.out.println(dao.getLatestStockInfoByTicker("ACT").toPrettyPrintedString());
 		
 		assertEquals("hey", "hey");
 	}

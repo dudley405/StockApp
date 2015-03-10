@@ -40,6 +40,7 @@
         <beans:property name="minPoolSize" value="${c3p0.min_size}" />
         <beans:property name="maxPoolSize" value="${c3p0.max_size}" />
         <beans:property name="maxIdleTime" value="${c3p0.timeout}" />
+         <beans:property name="maxStatements" value="${c3p0.max_statements}" />
     </beans:bean>
      
     <beans:bean id="sessionFactory" class="org.springframework.orm.hibernate4.LocalSessionFactoryBean" >

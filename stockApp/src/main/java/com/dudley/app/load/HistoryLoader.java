@@ -22,7 +22,7 @@ public class HistoryLoader {
 	
 	public void run() {
 		
-		List<Company> companyList = companyService.findFirst(10);
+		List<Company> companyList = companyService.findFirst(5);
 		
 		for (Company comp : companyList) {
 			quandlService.updateAllPriceHistoryByTicker(comp.getStockTicker());

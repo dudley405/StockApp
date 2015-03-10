@@ -39,7 +39,7 @@ public class HomeController {
 		
 		model.addAttribute("serverTime", formattedDate );
 		
-		model.addAttribute("companies", companyService.findAllCompanies());
+		model.addAttribute("companies", companyService.findByTicker("ACT"));
 		
 		return "home";
 	}

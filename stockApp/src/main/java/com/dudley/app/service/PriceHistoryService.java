@@ -1,5 +1,7 @@
 package com.dudley.app.service;
 
+import java.util.List;
+
 import org.hibernate.Session;
 
 import com.dudley.app.entities.Company;
@@ -9,7 +11,7 @@ public interface PriceHistoryService {
 	
 	void savePriceHistory(PriceHistory priceHistory);
 	
-	PriceHistory getPriceHistoryByCompany(Company company);
+	List<PriceHistory> getPriceHistoryByCompany(Company company);
 	
 	void commit();
 	

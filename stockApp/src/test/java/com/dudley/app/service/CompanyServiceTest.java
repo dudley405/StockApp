@@ -23,32 +23,11 @@ public class CompanyServiceTest extends BaseTest {
 	
 	@Test
 	public void testRetrieveByTicker() {
-		Company company = service.findByTicker("WLL");
+		Company company = service.findByTicker("ACT");
 		
-		assertEquals(company.getStockTicker().trim(), "WLL");
+		assertEquals(company.getStockTicker().trim(), "ACT");
 	}
 	
-	@Test
-	public void updateCompany() {
-		
-		Company company = service.findByTicker("WLL");
-		
-		company.setCompanyDescription("what");
-		service.updateCompany(company);
-		
-		assertEquals(company.getCompanyDescription().trim(), "what");
-		
-	}
-	
-	@Test public void saveComany() {
-		Company company = new Company();
-		
-		company.setCompanyName("Whiting Petroleum");
-		company.setCompanyDescription("Large contractor");
-		company.setStockTicker("WLL");
-		
-		service.saveCompany(company);
-	}
 }
 
 

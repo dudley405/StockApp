@@ -73,11 +73,7 @@ public class CompanyServiceImpl implements CompanyService {
 	}
 
 	public Company findByTicker(String stockTicker) {
-		if (stockTicker != null) {	
-			return dao.findByTicker(stockTicker);	
-		} else {
-			return null;
-		}
+		return dao.findByTicker(stockTicker);
 	}
 
 }

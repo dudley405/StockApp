@@ -20,11 +20,11 @@ public class PriceHistoryServiceTest extends BaseTest {
 		LocalDate date = LocalDate.now();
 		
 		priceHistory.setPriceDate(date);
-		priceHistory.setStockPrice(new Double(63.45));
+		priceHistory.setClosingPrice(new Double(63.45));
 		
 		historyService.savePriceHistory(priceHistory);
 		
-		assertEquals(priceHistory.getStockPrice(), new Double(63.45));
+		assertEquals(priceHistory.getClosingPrice(), new Double(63.45));
 	}
 
 }

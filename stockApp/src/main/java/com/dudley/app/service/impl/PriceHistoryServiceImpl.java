@@ -1,5 +1,7 @@
 package com.dudley.app.service.impl;
 
+import java.util.List;
+
 import org.hibernate.Session;
 import org.joda.time.LocalDate;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,14 +31,18 @@ public class PriceHistoryServiceImpl implements PriceHistoryService {
 			dao.persist(priceHistory);
 		} else {
 			existingPriceHistory.setPriceDate(priceHistory.getPriceDate());
-			existingPriceHistory.setStockPrice(priceHistory.getStockPrice());
+			existingPriceHistory.setClosingPrice(priceHistory.getClosingPrice());
+			existingPriceHistory.setOpenPrice(priceHistory.getOpenPrice());
+			existingPriceHistory.setLowPrice(priceHistory.getLowPrice());
+			existingPriceHistory.setHighPrice(priceHistory.getHighPrice());
+			existingPriceHistory.setVolume(priceHistory.getVolume());
 			dao.update(existingPriceHistory);
 		}
 	}
 
 	@Override
-	public PriceHistory getPriceHistoryByCompany(Company company) {
-		return (PriceHistory) dao.getPriceHistoryByCompany(company);
+	public List<PriceHistory> getPriceHistoryByCompany(Company company) {
+		return  dao.getPriceHistoryByCompany(company);
 	}
 	
 	public void commit() {
