@@ -1,31 +1,38 @@
 package com.dudley.app.web.servlet;
 
 import java.io.IOException;
-import java.util.ArrayList;
+import java.lang.reflect.Type;
 import java.util.List;
-import java.util.Set;
 
-import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.joda.time.DateTime;
+import org.joda.time.LocalDate;
+import org.joda.time.format.DateTimeFormatter;
+import org.joda.time.format.ISODateTimeFormat;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.context.support.SpringBeanAutowiringSupport;
+import org.springframework.stereotype.Component;
+import org.springframework.web.HttpRequestHandler;
 
+import com.dudley.app.dao.JsonDao;
+import com.dudley.app.entities.Company;
 import com.dudley.app.entities.PriceHistory;
 import com.dudley.app.service.CompanyService;
-import com.dudley.app.service.PriceHistoryService;
+import com.google.gson.FieldNamingPolicy;
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonPrimitive;
+import com.google.gson.JsonSerializationContext;
+import com.google.gson.JsonSerializer;
 
-@WebServlet("/CompanyJsonDataServlet")
-public class CompanyJsonDataServlet extends HttpServlet {
+@Component("jsonServlet")
+public class CompanyJsonDataServlet implements HttpRequestHandler {
 	
 	@Autowired
-	PriceHistoryService historyService;
+	JsonDao jsonDao;
 	
 	@Autowired
 	CompanyService companyService;
@@ -35,28 +42,43 @@ public class CompanyJsonDataServlet extends HttpServlet {
 	public CompanyJsonDataServlet() {
 		super();
 	}
-	
-	public void init(ServletConfig config) throws ServletException {
-		super.init(config);
-		SpringBeanAutowiringSupport.processInjectionBasedOnServletContext(this,
-			      config.getServletContext());
-	}
-	
-	protected void doGet(HttpServletRequest request,
-			HttpServletResponse response) throws ServletException, IOException {
+
+	@Override
+	public void handleRequest(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+
+		Company company = companyService.findByTicker("ACT");
 		
-		Set<PriceHistory> priceHistories = companyService.findByTicker("ACT").getPriceHistories();
+		List<PriceHistory> priceHistoriesList = jsonDao.getPriceHistories(company.getCompanyId());
 		
-		List<PriceHistory> priceHistoriesList = new ArrayList<PriceHistory>();
-		priceHistoriesList.addAll(priceHistories);
-		
-		Gson gson = new Gson();
+		Gson gson=new GsonBuilder().serializeNulls().registerTypeAdapter(DateTime.class,new JodaDateTimeAdapter()).registerTypeAdapter(LocalDate.class,new JodaLocalDateAdapter()).setPrettyPrinting().create();
 		
 		String jsonString = gson.toJson(priceHistoriesList);
 		
 		response.setContentType("application/json");
 		
 		response.getWriter().write(jsonString);
+		
 	}
+	
+	public class JodaDateTimeAdapter implements JsonSerializer<DateTime> { 
+		 
+		@Override
+	    public JsonElement serialize(DateTime src, Type typeOfSrc, 
+	        JsonSerializationContext context) { 
+	      DateTimeFormatter fmt = ISODateTimeFormat.dateTimeNoMillis(); 
+	      return new JsonPrimitive(fmt.print(src)); 
+		}
+	     
+	  }  
+	   
+	  public class JodaLocalDateAdapter implements JsonSerializer<LocalDate> { 
+	 
+	    public JsonElement serialize(LocalDate src, Type typeOfSrc, 
+	        JsonSerializationContext context) { 
+	      DateTimeFormatter fmt = ISODateTimeFormat.date(); 
+	      return new JsonPrimitive(fmt.print(src)); 
+	    } 
+	  } 
 	
 }

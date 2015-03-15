@@ -1,12 +1,16 @@
 package com.dudley.app.load;
 
-import java.util.List;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 
-import org.hibernate.Transaction;
+import javax.sql.DataSource;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.dudley.app.entities.Company;
 import com.dudley.app.service.CompanyService;
 import com.dudley.app.service.quandl.QuandlService;
 
@@ -16,16 +20,45 @@ public class HistoryLoader {
 	@Autowired
 	CompanyService companyService;
 	
+	@Autowired 
+	DataSource dataSource;
+	
 	@Autowired
 	QuandlService quandlService;
+	
+	private static Logger logger = LoggerFactory.getLogger(HistoryLoader.class);
 
 	
 	public void run() {
 		
-		List<Company> companyList = companyService.findFirst(5);
+		String sql = "select stock_ticker, company_id from Company";
 		
-		for (Company comp : companyList) {
-			quandlService.updateAllPriceHistoryByTicker(comp.getStockTicker());
+		Connection conn = null;
+		PreparedStatement ps = null;
+		ResultSet rs = null;
+		
+		try {
+		
+			conn = dataSource.getConnection();
+			
+			ps = conn.prepareStatement(sql);
+			
+			rs = ps.executeQuery();
+			
+			while (rs.next()) {
+				quandlService.updateAllPriceHistoryByTicker(rs.getString("stock_ticker"), rs.getInt("company_id"), conn);
+			}
+			
+		} catch (Exception e) {
+			logger.error("Error loading priceHistory data ", e);
+		} finally {
+			try {
+				if (conn != null) {
+					conn.close();
+				}
+			} catch (Exception ex) {
+				logger.error("Error closing database connection ", ex);
+			}
 		}
 	}
 }

@@ -14,7 +14,7 @@ public class QuandlServiceTest extends BaseTest {
 
 	@Test
 	public void testLoadAllHistories() {
-		service.updateAllPriceHistoryByTicker("WLL");
+		//service.updateAllPriceHistoryByTicker("WLL");
 	}
 
 }
